@@ -21,10 +21,10 @@ public class Skill {
     private String nome;
 
     @Column(nullable = false)
-    private int tecAmp;
+    private double tecAmp;
 
     @Column(nullable = false)
-    private int atkAdicional;
+    private double atkAdicional;
 
     @Column(nullable = false)
     private double duracao;
@@ -66,19 +66,19 @@ public class Skill {
         this.nome = nome;
     }
 
-    public int getTecAmp() {
+    public double getTecAmp() {
         return tecAmp;
     }
 
-    public void setTecAmp(int tecAmp) {
+    public void setTecAmp(double tecAmp) {
         this.tecAmp = tecAmp;
     }
 
-    public int getAtkAdicional() {
+    public double getAtkAdicional() {
         return atkAdicional;
     }
 
-    public void setAtkAdicional(int atkAdicional) {
+    public void setAtkAdicional(double atkAdicional) {
         this.atkAdicional = atkAdicional;
     }
 

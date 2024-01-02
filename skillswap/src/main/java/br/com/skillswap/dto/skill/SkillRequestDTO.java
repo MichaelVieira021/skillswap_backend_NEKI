@@ -3,8 +3,8 @@ package br.com.skillswap.dto.skill;
 public class SkillRequestDTO {
     
 	private String nome;
-    private int tecAmp;
-    private int atkAdicional;
+    private double tecAmp;
+    private double atkAdicional;
     private double duracao;
     private double resfriamento;
     private String foto;
@@ -15,16 +15,16 @@ public class SkillRequestDTO {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public int getTecAmp() {
+	public double getTecAmp() {
 		return tecAmp;
 	}
-	public void setTecAmp(int tecAmp) {
+	public void setTecAmp(double tecAmp) {
 		this.tecAmp = tecAmp;
 	}
-	public int getAtkAdicional() {
+	public double getAtkAdicional() {
 		return atkAdicional;
 	}
-	public void setAtkAdicional(int atkAdicional) {
+	public void setAtkAdicional(double atkAdicional) {
 		this.atkAdicional = atkAdicional;
 	}
 
