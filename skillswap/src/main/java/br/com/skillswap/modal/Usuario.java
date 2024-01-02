@@ -1,11 +1,13 @@
 package br.com.skillswap.modal;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import br.com.skillswap.common.ConversorData;
 
@@ -29,6 +31,9 @@ public class Usuario{
 
     @Column(nullable = false)
     private String dtCadastro;
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<UserSkill> userSkills;
     
     public Usuario() {
     	this.dtCadastro = ConversorData.converterDateParaDataHora(new Date());
@@ -72,4 +77,12 @@ public class Usuario{
     public void setDtCadastro(String dtCadastro) {
         this.dtCadastro = dtCadastro;
     }
+    
+	public List<UserSkill> getUserSkills() {
+		return userSkills;
+	}
+	
+	public void setUserSkills(List<UserSkill> userSkills) {
+		this.userSkills = userSkills;
+	}
 }
