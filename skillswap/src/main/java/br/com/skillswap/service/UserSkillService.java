@@ -36,8 +36,8 @@ public class UserSkillService {
 		for(UserSkill uSkill : skillsUser) {
 			if(uSkill.getLevel() > 1) {
 				Skill skill = uSkill.getSkill();
-				skill.setAtkAdicional(skill.getAtkAdicional() + (skill.getAtkAdicional() * (0.2 * uSkill.getLevel())));
-				skill.setTecAmp(skill.getTecAmp() + (skill.getTecAmp() * (0.2 * uSkill.getLevel())));
+				skill.setAtkAdicional((int) (skill.getAtkAdicional() + (skill.getAtkAdicional() * (0.2 * uSkill.getLevel()))));
+				skill.setTecAmp((int) (skill.getTecAmp() + (skill.getTecAmp() * (0.2 * uSkill.getLevel()))));
 				skill.setResfriamento(skill.getResfriamento() - (skill.getResfriamento() * (0.005 * uSkill.getLevel())));
 				skill.setDuracao(skill.getDuracao() + (skill.getDuracao() * (0.04 * uSkill.getLevel())));
 			}
