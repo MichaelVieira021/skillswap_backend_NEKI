@@ -16,6 +16,8 @@ import br.com.skillswap.dto.usuario.UsuarioLoginResponseDTO;
 import br.com.skillswap.dto.usuario.UsuarioRequestDTO;
 import br.com.skillswap.dto.usuario.UsuarioResponseDTO;
 import br.com.skillswap.modal.Usuario;
+import br.com.skillswap.modal.exceptions.ResourceBadRequestException;
+import br.com.skillswap.modal.exceptions.ResourceConflict;
 import br.com.skillswap.repository.UsuarioRepository;
 import br.com.skillswap.security.JWTService;
 
@@ -51,7 +53,7 @@ public class UsuarioService {
 		Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 		
 		if(optUsuario.isEmpty()){
-            throw new RuntimeException("Nenhum registro encontrado para o ID: " + id);
+            throw new ResourceBadRequestException("Nenhum registro encontrado para o ID: " + id);
         }
 		
 		return mapper.map(optUsuario.get(), UsuarioResponseDTO.class);
@@ -88,7 +90,7 @@ public class UsuarioService {
         Optional<Usuario> optUsuario =  usuarioRepository.findByEmail(email);
         
 		if(optUsuario.isEmpty()){
-            throw new RuntimeException("Nenhum registro encontrado para o email: " + email);
+            throw new ResourceBadRequestException("Nenhum registro encontrado para o email: " + email);
         }
         return mapper.map(optUsuario.get(),UsuarioResponseDTO.class);
     }
@@ -98,10 +100,10 @@ public class UsuarioService {
 
 		for (UsuarioResponseDTO usuarioResponse : listaUsuarioResponse){
 			if(usuarioResponse.getEmail().equals(usuarioRequest.getEmail()) && usuarioResponse.getId() != id){
-				throw new RuntimeException("E-mail já cadastrado!");
+				throw new ResourceConflict("E-mail já cadastrado!");
 			}
 			else if (usuarioResponse.getNomeUsuario().equals(usuarioRequest.getNomeUsuario()) && usuarioResponse.getId() != id) {
-				throw new RuntimeException("Nome de usuario já cadastrado!");
+				throw new ResourceConflict("Nome de usuario já cadastrado!");
 			}
 		}
 	}
@@ -116,7 +118,7 @@ public class UsuarioService {
 			return new UsuarioLoginResponseDTO(token, usuarioResponse);
 
 		} catch (RuntimeException e){
-			throw new RuntimeException("E-mail ou senha incorretos.");
+			throw new ResourceBadRequestException("E-mail ou senha incorretos.");
 		}
         
     }

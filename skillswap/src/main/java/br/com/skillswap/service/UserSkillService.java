@@ -11,6 +11,7 @@ import br.com.skillswap.dto.usuario.UsuarioResponseDTO;
 import br.com.skillswap.modal.Skill;
 import br.com.skillswap.modal.UserSkill;
 import br.com.skillswap.modal.Usuario;
+import br.com.skillswap.modal.exceptions.ResourceBadRequestException;
 import br.com.skillswap.repository.UserSkillRepository;
 
 @Service
@@ -51,7 +52,7 @@ public class UserSkillService {
 		Optional<UserSkill> optSkillUser = userSkillRepository.findById(id);
 		
 		if(optSkillUser.isEmpty()){
-            throw new RuntimeException("Nenhum registro encontrado para o ID: " + id);
+            throw new ResourceBadRequestException("Nenhum registro encontrado para o ID: " + id);
         }
 		
 		return mapper.map(optSkillUser.get(), UserSkillResponseDTO.class);
@@ -74,7 +75,7 @@ public class UserSkillService {
 		userSkill.setId(id);
 		
 		if(userSkill.getLevel() == 20) {
-			throw new RuntimeException("Level maximo");
+			throw new ResourceBadRequestException("Level maximo");
 		}
 		
 		userSkill.setLevel(userSkill.getLevel() + 1);
@@ -88,7 +89,7 @@ public class UserSkillService {
 		userSkill.setId(id);
 		
 		if(userSkill.getLevel() == 1) {
-			throw new RuntimeException("Level mínimo");
+			throw new ResourceBadRequestException("Level mínimo");
 		}
 		
 		userSkill.setLevel(userSkill.getLevel() - 1);

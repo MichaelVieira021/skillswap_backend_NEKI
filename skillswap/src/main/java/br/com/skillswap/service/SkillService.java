@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.skillswap.dto.skill.SkillRequestDTO;
 import br.com.skillswap.dto.skill.SkillResponseDTO;
 import br.com.skillswap.modal.Skill;
+import br.com.skillswap.modal.exceptions.ResourceBadRequestException;
 import br.com.skillswap.repository.SkillRepository;
 
 @Service
@@ -33,7 +34,7 @@ public class SkillService {
 		Optional<Skill> optSkill = skillRepository.findById(id);
 		
 		if(optSkill.isEmpty()){
-            throw new RuntimeException("Nenhum registro encontrado para o ID: " + id);
+            throw new ResourceBadRequestException("Nenhum registro encontrado para o ID: " + id);
         }
 		
 		return mapper.map(optSkill.get(), SkillResponseDTO.class);

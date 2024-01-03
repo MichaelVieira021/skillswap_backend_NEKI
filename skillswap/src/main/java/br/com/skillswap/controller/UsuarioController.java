@@ -18,6 +18,7 @@ import br.com.skillswap.dto.usuario.UsuarioLoginRequestDTO;
 import br.com.skillswap.dto.usuario.UsuarioLoginResponseDTO;
 import br.com.skillswap.dto.usuario.UsuarioRequestDTO;
 import br.com.skillswap.dto.usuario.UsuarioResponseDTO;
+import br.com.skillswap.modal.exceptions.ResourceBadRequestException;
 import br.com.skillswap.security.JWTService;
 import br.com.skillswap.service.UserSkillService;
 import br.com.skillswap.service.UsuarioService;
@@ -56,19 +57,19 @@ public class UsuarioController {
 	public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuarioRequest){
 
 		if(usuarioRequest.getNomeUsuario() == null || usuarioRequest.getNomeUsuario().length() < 1){
-			throw new  RuntimeException("Nome do usuario não pode estar vazio.");
+			throw new  ResourceBadRequestException("Nome do usuario não pode estar vazio.");
 		} else if(usuarioRequest.getNomeUsuario().length() > 15){
-			throw new  RuntimeException("Limite de caracteres excedido, MAX:15");
+			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
 		}
 
 		if(usuarioRequest.getEmail() == null || usuarioRequest.getEmail().length() < 1){
-			throw new  RuntimeException("E-mail não pode estar vazio.");
+			throw new  ResourceBadRequestException("E-mail não pode estar vazio.");
 		}
 
 		if(usuarioRequest.getSenha() == null || usuarioRequest.getSenha().length() < 1){
-			throw new  RuntimeException("Senha não pode estar vazio.");
+			throw new  ResourceBadRequestException("Senha não pode estar vazio.");
 		} else if(usuarioRequest.getSenha().length() > 15){
-			throw new  RuntimeException("Limite de caracteres excedido, MAX:15");
+			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
 		}
 
 		return ResponseEntity.status(201).body(usuarioService.adicionar(usuarioRequest));
@@ -78,19 +79,19 @@ public class UsuarioController {
 	public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequest){
 
 		if(usuarioRequest.getNomeUsuario() == null || usuarioRequest.getNomeUsuario().length() < 1){
-			throw new  RuntimeException("Nome do usuario não pode estar vazio.");
+			throw new  ResourceBadRequestException("Nome do usuario não pode estar vazio.");
 		} else if(usuarioRequest.getNomeUsuario().length() > 15){
-			throw new  RuntimeException("Limite de caracteres excedido, MAX:15");
+			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
 		}
 
 		if(usuarioRequest.getEmail() == null || usuarioRequest.getEmail().length() < 1){
-			throw new  RuntimeException("E-mail não pode estar vazio.");
+			throw new  ResourceBadRequestException("E-mail não pode estar vazio.");
 		}
 
 		if(usuarioRequest.getSenha() == null || usuarioRequest.getSenha().length() < 1){
-			throw new  RuntimeException("Senha não pode estar vazio.");
+			throw new  ResourceBadRequestException("Senha não pode estar vazio.");
 		} else if(usuarioRequest.getSenha().length() > 15){
-			throw new  RuntimeException("Limite de caracteres excedido, MAX:15");
+			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
 		}
 
 		return ResponseEntity.status(200).body(usuarioService.atualizar(id, usuarioRequest));
