@@ -60,7 +60,7 @@ public class UsuarioService {
 	}
 	
 	public UsuarioResponseDTO adicionar(UsuarioRequestDTO usuarioRequest){
-		uniqueEMAILeUSER(usuarioRequest, 0L);
+		uniqueLOGIN(usuarioRequest, 0L);
 		Usuario usuarioModel = mapper.map(usuarioRequest, Usuario.class);
 		String senha =  passwordEncoder.encode(usuarioModel.getSenha());
 		usuarioModel.setSenha(senha);
@@ -70,7 +70,7 @@ public class UsuarioService {
 	}
 	
 	public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO usuarioRequest){
-		uniqueEMAILeUSER(usuarioRequest, id);
+		uniqueLOGIN(usuarioRequest, id);
 		obterPorId(id);
 		Usuario usuarioModel = mapper.map(usuarioRequest, Usuario.class);
 		usuarioModel.setId(id);
@@ -86,39 +86,34 @@ public class UsuarioService {
 		usuarioRepository.deleteById(id);
 	}
 
-	public UsuarioResponseDTO obterPorEmail(String email){
-        Optional<Usuario> optUsuario =  usuarioRepository.findByEmail(email);
+	public UsuarioResponseDTO obterPorLogin(String login){
+        Optional<Usuario> optUsuario =  usuarioRepository.findByLogin(login);
         
 		if(optUsuario.isEmpty()){
-            throw new ResourceBadRequestException("Nenhum registro encontrado para o email: " + email);
+            throw new ResourceBadRequestException("Nenhum registro encontrado para o login: " + login);
         }
         return mapper.map(optUsuario.get(),UsuarioResponseDTO.class);
     }
 
-	public void uniqueEMAILeUSER(UsuarioRequestDTO usuarioRequest, Long id){
-		List<UsuarioResponseDTO> listaUsuarioResponse = obterTodos();
+	public void uniqueLOGIN(UsuarioRequestDTO usuarioRequest, Long id){
+		Optional<Usuario> optUsuario =  usuarioRepository.findByLogin(usuarioRequest.getLogin());
 
-		for (UsuarioResponseDTO usuarioResponse : listaUsuarioResponse){
-			if(usuarioResponse.getEmail().equals(usuarioRequest.getEmail()) && usuarioResponse.getId() != id){
-				throw new ResourceConflict("E-mail já cadastrado!");
-			}
-			else if (usuarioResponse.getNomeUsuario().equals(usuarioRequest.getNomeUsuario()) && usuarioResponse.getId() != id) {
-				throw new ResourceConflict("Nome de usuario já cadastrado!");
-			}
+		if(optUsuario.isPresent() && optUsuario.get().getId() != id){ 
+			throw new ResourceConflict("Login já cadastrado!");
 		}
 	}
 	
-	public UsuarioLoginResponseDTO logar(String email, String senha){
+	public UsuarioLoginResponseDTO logar(String login, String senha){
 		try{
-			Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, senha,Collections.emptyList()));
+			Authentication autenticacao = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, senha,Collections.emptyList()));
 		
 			SecurityContextHolder.getContext().setAuthentication(autenticacao);
 			String token =  BEARER + jwtService.gerarToken(autenticacao);
-			UsuarioResponseDTO usuarioResponse = obterPorEmail(email);
+			UsuarioResponseDTO usuarioResponse = obterPorLogin(login);
 			return new UsuarioLoginResponseDTO(token, usuarioResponse);
 
 		} catch (RuntimeException e){
-			throw new ResourceBadRequestException("E-mail ou senha incorretos.");
+			throw new ResourceBadRequestException("Login ou senha incorretos.");
 		}
         
     }

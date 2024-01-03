@@ -23,7 +23,6 @@ import br.com.skillswap.security.JWTService;
 import br.com.skillswap.service.UserSkillService;
 import br.com.skillswap.service.UsuarioService;
 
-
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -48,22 +47,18 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioService.obterPorId(id));
 	}
 
-	@GetMapping("/email/{email}")
-	public ResponseEntity<UsuarioResponseDTO> obterPorEmail(@PathVariable String email){
-		return ResponseEntity.ok(usuarioService.obterPorEmail(email));
+	@GetMapping("/login/{login}")
+	public ResponseEntity<UsuarioResponseDTO> obterPorLogin(@PathVariable String login){
+		return ResponseEntity.ok(usuarioService.obterPorLogin(login));
 	}
 
 	@PostMapping
 	public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuarioRequest){
 
-		if(usuarioRequest.getNomeUsuario() == null || usuarioRequest.getNomeUsuario().length() < 1){
-			throw new  ResourceBadRequestException("Nome do usuario não pode estar vazio.");
-		} else if(usuarioRequest.getNomeUsuario().length() > 15){
+		if(usuarioRequest.getLogin() == null || usuarioRequest.getLogin().length() < 1){
+			throw new  ResourceBadRequestException("Login não pode estar vazio.");
+		}else if(usuarioRequest.getLogin().length() > 15){
 			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
-		}
-
-		if(usuarioRequest.getEmail() == null || usuarioRequest.getEmail().length() < 1){
-			throw new  ResourceBadRequestException("E-mail não pode estar vazio.");
 		}
 
 		if(usuarioRequest.getSenha() == null || usuarioRequest.getSenha().length() < 1){
@@ -78,14 +73,10 @@ public class UsuarioController {
 	@PutMapping("/{id}")
 	public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequest){
 
-		if(usuarioRequest.getNomeUsuario() == null || usuarioRequest.getNomeUsuario().length() < 1){
-			throw new  ResourceBadRequestException("Nome do usuario não pode estar vazio.");
-		} else if(usuarioRequest.getNomeUsuario().length() > 15){
+		if(usuarioRequest.getLogin() == null || usuarioRequest.getLogin().length() < 1){
+			throw new  ResourceBadRequestException("Login não pode estar vazio.");
+		}else if(usuarioRequest.getLogin().length() > 15){
 			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
-		}
-
-		if(usuarioRequest.getEmail() == null || usuarioRequest.getEmail().length() < 1){
-			throw new  ResourceBadRequestException("E-mail não pode estar vazio.");
 		}
 
 		if(usuarioRequest.getSenha() == null || usuarioRequest.getSenha().length() < 1){
@@ -105,8 +96,8 @@ public class UsuarioController {
 	
 	@PostMapping("/login")
     public ResponseEntity<UsuarioLoginResponseDTO> logar(@RequestBody UsuarioLoginRequestDTO usuariologinRequest){
-        UsuarioLoginResponseDTO usuarioLogado = usuarioService.logar(usuariologinRequest.getEmail(), usuariologinRequest.getSenha());
-        return ResponseEntity.status(200).body(usuarioLogado);
+//        UsuarioLoginResponseDTO usuarioLogado = usuarioService.logar(usuariologinRequest.getLogin(), usuariologinRequest.getSenha());
+        return ResponseEntity.status(200).body(usuarioService.logar(usuariologinRequest.getLogin(), usuariologinRequest.getSenha()));
     }
 	
 	@PostMapping("/validar/token")

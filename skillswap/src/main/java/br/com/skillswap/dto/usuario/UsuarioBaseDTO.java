@@ -2,23 +2,14 @@ package br.com.skillswap.dto.usuario;
 
 public abstract class UsuarioBaseDTO {
     
-    private String nomeUsuario;
-    private String email;
+    private String login;
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public String getLogin() {
+        return login;
     }
 
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 }
 

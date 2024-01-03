@@ -2,15 +2,15 @@ package br.com.skillswap.dto.usuario;
 
 public class UsuarioLoginRequestDTO {
 
-    private String email;
+    private String login;
     private String senha;
 
-    public String getEmail() {
-        return email;
+    public String getLogin() {
+        return login;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getSenha() {
