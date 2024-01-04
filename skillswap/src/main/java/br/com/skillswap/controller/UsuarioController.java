@@ -117,7 +117,7 @@ public class UsuarioController {
 	public ResponseEntity<List<UserSkillResponseDTO>> obterTodosSkillUser(@RequestParam Long userId){
 		return ResponseEntity.ok(userSkillService.obterTodos(userId)); 
 	}
-	
+		
 	@PostMapping("/adicionar/skill")
 	public ResponseEntity<UserSkillResponseDTO> adicionarSkill(@RequestParam Long idUser, @RequestParam Long idSkill, @RequestParam Long level){
 		return ResponseEntity.status(200).body(userSkillService.adicionar(idUser, idSkill, level));

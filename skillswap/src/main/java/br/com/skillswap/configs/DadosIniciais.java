@@ -35,9 +35,7 @@ public class DadosIniciais {
 		usuarioRequest.setLogin("MichaelVieira");
 		usuarioRequest.setSenha("123");
 
-		return usuarioRequest;
-				
-				
+		return usuarioRequest;			
 	}
 	
 	private List<Skill> getSkills() {

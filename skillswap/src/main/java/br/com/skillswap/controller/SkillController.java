@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.skillswap.dto.skill.SkillRequestDTO;
 import br.com.skillswap.dto.skill.SkillResponseDTO;
+import br.com.skillswap.dto.userSkill.UserSkillResponseDTO;
 import br.com.skillswap.service.SkillService;
 
 @RestController
@@ -25,6 +27,11 @@ public class SkillController {
 	@GetMapping
 	public ResponseEntity<List<SkillResponseDTO>> obterTodos(){
 		return ResponseEntity.ok(skillService.obterTodos());
+	}
+	
+	@GetMapping("/skillsUserNot")
+	public ResponseEntity<List<SkillResponseDTO>> obterTodosSkillUserNot(@RequestParam Long userId){
+		return ResponseEntity.ok(skillService.obterTodosUserNot(userId)); 
 	}
 
 	@GetMapping("/{id}")
