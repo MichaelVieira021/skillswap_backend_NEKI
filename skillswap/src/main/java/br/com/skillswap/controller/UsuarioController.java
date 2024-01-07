@@ -52,19 +52,23 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioService.obterPorLogin(login));
 	}
 
-	@PostMapping
+	@PostMapping("/cadastrar")
 	public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuarioRequest){
 
 		if(usuarioRequest.getLogin() == null || usuarioRequest.getLogin().length() < 1){
 			throw new  ResourceBadRequestException("Login não pode estar vazio.");
 		}else if(usuarioRequest.getLogin().length() > 15){
-			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
+			throw new  ResourceBadRequestException("Ops! Parece que seu login está um pouco longo. MAX:15");
+		}else if(usuarioRequest.getLogin().length() < 4){
+			throw new  ResourceBadRequestException("Ops! Parece que seu login está um pouco curto. MIN:4");
 		}
 
 		if(usuarioRequest.getSenha() == null || usuarioRequest.getSenha().length() < 1){
 			throw new  ResourceBadRequestException("Senha não pode estar vazio.");
-		} else if(usuarioRequest.getSenha().length() > 15){
-			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
+		}else if(usuarioRequest.getSenha().length() > 15){
+			throw new  ResourceBadRequestException("Ops! Parece que sua senha está um pouco longa. MAX:15");
+		}else if(usuarioRequest.getSenha().length() < 4){
+			throw new  ResourceBadRequestException("Ops! Parece que sua senha está um pouco curta. MIN:4");
 		}
 
 		return ResponseEntity.status(201).body(usuarioService.adicionar(usuarioRequest));
@@ -76,13 +80,17 @@ public class UsuarioController {
 		if(usuarioRequest.getLogin() == null || usuarioRequest.getLogin().length() < 1){
 			throw new  ResourceBadRequestException("Login não pode estar vazio.");
 		}else if(usuarioRequest.getLogin().length() > 15){
-			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
+			throw new  ResourceBadRequestException("Ops! Parece que seu login está um pouco longo. MAX:15");
+		}else if(usuarioRequest.getLogin().length() < 4){
+			throw new  ResourceBadRequestException("Ops! Parece que seu login está um pouco curto. MIN:4");
 		}
 
 		if(usuarioRequest.getSenha() == null || usuarioRequest.getSenha().length() < 1){
 			throw new  ResourceBadRequestException("Senha não pode estar vazio.");
-		} else if(usuarioRequest.getSenha().length() > 15){
-			throw new  ResourceBadRequestException("Limite de caracteres excedido, MAX:15");
+		}else if(usuarioRequest.getSenha().length() > 15){
+			throw new  ResourceBadRequestException("Ops! Parece que sua senha está um pouco longa. MAX:15");
+		}else if(usuarioRequest.getSenha().length() < 4){
+			throw new  ResourceBadRequestException("Ops! Parece que sua senha está um pouco curta. MIN:4");
 		}
 
 		return ResponseEntity.status(200).body(usuarioService.atualizar(id, usuarioRequest));
