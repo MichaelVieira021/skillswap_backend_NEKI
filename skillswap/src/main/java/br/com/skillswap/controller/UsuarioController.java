@@ -2,6 +2,7 @@ package br.com.skillswap.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +25,13 @@ import br.com.skillswap.service.UserSkillService;
 import br.com.skillswap.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping(value = "/usuarios", produces = {"application/json"})
+@Tag(name = "Funcionalidades do usuarios")
 public class UsuarioController {
 
 	@Autowired
@@ -38,27 +43,51 @@ public class UsuarioController {
 	@Autowired
 	private JWTService jwtService;
 	
-	@Operation(summary = "Buscar todos usuarios cadastrados", method = "GET", description = "...")
-	@ApiResponse(responseCode = "200", description = "Busca realizada com sucesso")
-//	@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos")
-	@ApiResponse(responseCode = "400", description = "Paramentros inválidos")
-	@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados")
+	@Operation(summary = "Pesquisa todos usuarios", method = "GET")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
 	@GetMapping
 	public ResponseEntity<List<UsuarioResponseDTO>> obterTodos(){
 		return ResponseEntity.ok(usuarioService.obterTodos());
 	}
 
-	@GetMapping("/{id}")
+	@Operation(summary = "Pesquisa usuario pelo ID", method = "GET")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<UsuarioResponseDTO> obterPorId(@PathVariable Long id){
 		return ResponseEntity.ok(usuarioService.obterPorId(id));
 	}
 
-	@GetMapping("/login/{login}")
+	@Operation(summary = "Pesquisa usuario pelo LOGIN", method = "GET")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@GetMapping(value = "/login/{login}")
 	public ResponseEntity<UsuarioResponseDTO> obterPorLogin(@PathVariable String login){
 		return ResponseEntity.ok(usuarioService.obterPorLogin(login));
 	}
 
-	@PostMapping("/cadastrar")
+	@Operation(summary = "Cadastrar um novo usuario", method = "POST")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "201", description = "Cadastro realizado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "409", description = "Usuario já cadastrado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PostMapping(name= "CADASTRAR",value = "/cadastrar", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UsuarioResponseDTO> adicionar(@RequestBody UsuarioRequestDTO usuarioRequest){
 
 		if(usuarioRequest.getLogin() == null || usuarioRequest.getLogin().length() < 1){
@@ -80,7 +109,16 @@ public class UsuarioController {
 		return ResponseEntity.status(201).body(usuarioService.adicionar(usuarioRequest));
 	}
 	
-	@PutMapping("/{id}")
+	
+	@Operation(summary = "Atualizar usuario", method = "PUT")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Atualizado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "409", description = "Usuario já cadastrado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PutMapping(value = "/{id}", name="ATUALIZAR", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UsuarioResponseDTO> atualizar(@PathVariable Long id, @RequestBody UsuarioRequestDTO usuarioRequest){
 
 		if(usuarioRequest.getLogin() == null || usuarioRequest.getLogin().length() < 1){
@@ -102,19 +140,38 @@ public class UsuarioController {
 		return ResponseEntity.status(200).body(usuarioService.atualizar(id, usuarioRequest));
 	}
 	
-	@DeleteMapping("/{id}")
+	@Operation(summary = "Deletar usuario", method = "DELETE")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204", description = "Deletado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@DeleteMapping(value = "/{id}", name="DELETAR")
 	public ResponseEntity<?> deletar(@PathVariable Long id){
 		usuarioService.deletar(id);
 		return ResponseEntity.status(204).build();
 	}
 	
-	@PostMapping("/login")
+	@Operation(summary = "Efetuar Login", method = "POST")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Logado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Login ou senha incorretos"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PostMapping(value= "/login", name= "LOGAR")
     public ResponseEntity<UsuarioLoginResponseDTO> logar(@RequestBody UsuarioLoginRequestDTO usuariologinRequest){
 //        UsuarioLoginResponseDTO usuarioLogado = usuarioService.logar(usuariologinRequest.getLogin(), usuariologinRequest.getSenha());
         return ResponseEntity.status(200).body(usuarioService.logar(usuariologinRequest.getLogin(), usuariologinRequest.getSenha()));
     }
 	
-	@PostMapping("/validar/token")
+	@Operation(summary = "Verificar token", method = "POST")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Token válido"),
+		@ApiResponse(responseCode = "401", description = "Token inválido/expirado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PostMapping(value= "/validar/token", name= "VERIFICAR TOKEN")
     public ResponseEntity<String> validarToken(@RequestParam String token) {
 	    if (token.startsWith("Bearer ")) {
 	        token = token.substring(7);
@@ -123,32 +180,66 @@ public class UsuarioController {
         if (jwtService.validarToken(token)) {
             return ResponseEntity.ok("Token válido");
         } else {
-            return ResponseEntity.ok("Token inválido ou expirado");
+            return ResponseEntity.status(401).body("Token inválido ou expirado");
         }
     }
 	
-	@GetMapping("/skillsUser")
+	@Operation(summary = "Buscar todas skills de determinado usuario", method = "GET")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Busca realizada com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@GetMapping(value= "/skillsUser", name="OBTER TODAS SKILLS USUARIO")
 	public ResponseEntity<List<UserSkillResponseDTO>> obterTodosSkillUser(@RequestParam Long userId){
 		return ResponseEntity.ok(userSkillService.obterTodos(userId)); 
 	}
 		
-	@PostMapping("/adicionar/skill")
+	@Operation(summary = "Adicionar skill ao usuario", method = "POST")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "201", description = "Adicionado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PostMapping(value= "/adicionar/skill", name= "ADICIONAR SKILL USER")
 	public ResponseEntity<UserSkillResponseDTO> adicionarSkill(@RequestParam Long idUser, @RequestParam Long idSkill, @RequestParam Long level){
-		return ResponseEntity.status(200).body(userSkillService.adicionar(idUser, idSkill, level));
+		return ResponseEntity.status(201).body(userSkillService.adicionar(idUser, idSkill, level));
 	}
 	
-	@PatchMapping("/levelUp/skill/{id}")
+	@Operation(summary = "Aumentar level skill", method = "PATCH")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Atualizado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PatchMapping(value= "/levelUp/skill/{id}", name= "LEVELUP")
 	public ResponseEntity<UserSkillResponseDTO> levelUp(@PathVariable Long id){
 		
 		return ResponseEntity.status(200).body(userSkillService.levelUp(id));		
 	}
 	
-	@PatchMapping("/levelDown/skill/{id}")
+	@Operation(summary = "Diminuir level skill", method = "PATCH")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "Atualizado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
+	@PatchMapping(value= "/levelDown/skill/{id}", name= "LEVELDOWN")
 	public ResponseEntity<UserSkillResponseDTO> levelDown(@PathVariable Long id){
 		
 		return ResponseEntity.status(200).body(userSkillService.levelDown(id));		
 	}
-	
+	@Operation(summary = "Deletar skill do usuario", method = "DELETE")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204", description = "Deletado com sucesso"),
+		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
+		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
+	})
 	@DeleteMapping("/deletar/skill/{id}")
 	public ResponseEntity<?> deletarSkillUser(@PathVariable Long id){
 		userSkillService.deletar(id);
