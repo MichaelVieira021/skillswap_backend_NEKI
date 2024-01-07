@@ -70,6 +70,7 @@ public class SkillController {
 		@ApiResponse(responseCode = "201", description = "Adicionada com sucesso"),
 		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
 		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "409", description = "Nome já cadastrado"),
 		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
 	})
 	@PostMapping(name="ADICIONAR SKILL")
@@ -82,6 +83,7 @@ public class SkillController {
 		@ApiResponse(responseCode = "201", description = "Atualizado com sucesso"),
 		@ApiResponse(responseCode = "400", description = "Paramentros inválidos"),
 		@ApiResponse(responseCode = "401", description = "Não autenticado"),
+		@ApiResponse(responseCode = "409", description = "Nome já cadastrado"),
 		@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados"),
 	})
 	@PutMapping(value="/{id}", name="ATUALIZAR SKILL")

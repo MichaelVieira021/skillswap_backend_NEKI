@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.com.skillswap.dto.skill.SkillRequestDTO;
 import br.com.skillswap.dto.skill.SkillResponseDTO;
+import br.com.skillswap.dto.usuario.UsuarioRequestDTO;
 import br.com.skillswap.dto.usuario.UsuarioResponseDTO;
 import br.com.skillswap.modal.Skill;
 import br.com.skillswap.modal.UserSkill;
 import br.com.skillswap.modal.Usuario;
 import br.com.skillswap.modal.exceptions.ResourceBadRequestException;
+import br.com.skillswap.modal.exceptions.ResourceConflict;
 import br.com.skillswap.repository.SkillRepository;
 import br.com.skillswap.repository.UserSkillRepository;
 
@@ -73,6 +75,7 @@ public class SkillService {
 	}
 	
 	public SkillResponseDTO adicionar(SkillRequestDTO skillRequest){
+		uniqueNAME(skillRequest, 0L);
 		Skill skillModel = mapper.map(skillRequest, Skill.class);
 		skillModel = skillRepository.save(skillModel);
 		
@@ -80,12 +83,21 @@ public class SkillService {
 	}
 	
 	public SkillResponseDTO atualizar(Long id, SkillRequestDTO skillRequest){
+		uniqueNAME(skillRequest, id);
 		obterPorId(id);
 		Skill skillModel = mapper.map(skillRequest, Skill.class);
 		skillModel.setId(id);
 		skillModel = skillRepository.save(skillModel);
 		
 		return mapper.map(skillModel, SkillResponseDTO.class);
+	}
+	
+	public void uniqueNAME(SkillRequestDTO skillRequest, Long id){
+		Optional<Skill> optSkill =  skillRepository.findByNome(skillRequest.getNome());
+
+		if(optSkill.isPresent() && optSkill.get().getId() != id){ 
+			throw new ResourceConflict("Nome de skill já cadastrado!");
+		}
 	}
 	
 	public void deletar(Long id) {
