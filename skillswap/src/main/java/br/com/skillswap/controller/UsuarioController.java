@@ -22,6 +22,8 @@ import br.com.skillswap.modal.exceptions.ResourceBadRequestException;
 import br.com.skillswap.security.JWTService;
 import br.com.skillswap.service.UserSkillService;
 import br.com.skillswap.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -36,7 +38,11 @@ public class UsuarioController {
 	@Autowired
 	private JWTService jwtService;
 	
-	
+	@Operation(summary = "Buscar todos usuarios cadastrados", method = "GET", description = "...")
+	@ApiResponse(responseCode = "200", description = "Busca realizada com sucesso")
+//	@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos")
+	@ApiResponse(responseCode = "400", description = "Paramentros inválidos")
+	@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos Dados")
 	@GetMapping
 	public ResponseEntity<List<UsuarioResponseDTO>> obterTodos(){
 		return ResponseEntity.ok(usuarioService.obterTodos());

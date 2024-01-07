@@ -1,12 +1,26 @@
 package br.com.skillswap.dto.skill;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Requisição de Habilidade")
 public class SkillRequestDTO {
     
-	private String nome;
+    @Schema(description = "Nome da habilidade", example = "Ataque Poderoso")
+    private String nome;
+
+    @Schema(description = "Amplificação técnica", example = "5")
     private int tecAmp;
+
+    @Schema(description = "Ataque adicional", example = "10")
     private int atkAdicional;
+
+    @Schema(description = "Duração da habilidade em segundos", example = "30.0")
     private double duracao;
+
+    @Schema(description = "Tempo de resfriamento da habilidade em segundos", example = "60.0")
     private double resfriamento;
+
+    @Schema(description = "URL da foto da habilidade", example = "https://example.com/habilidade.jpg")
     private String foto;
     
 	public String getNome() {
