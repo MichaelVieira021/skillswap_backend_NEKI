@@ -59,6 +59,7 @@ public class UserSkillService {
 	}
 	
 	public UserSkillResponseDTO adicionar(Long idUser, Long idSkill, Long level){
+		validarLevel(level);
 		Usuario user = mapper.map(usuarioService.obterPorId(idUser), Usuario.class);
 		Skill skill = mapper.map(skillService.obterPorId(idSkill), Skill.class);
 		UserSkill userSkillModel = new UserSkill();
@@ -71,6 +72,7 @@ public class UserSkillService {
 	}
 	
 	public UserSkillResponseDTO levelUp(Long id) {
+		validarLevel(id);
 		UserSkill userSkill = mapper.map(obterPorId(id), UserSkill.class);
 		userSkill.setId(id);
 		
@@ -85,6 +87,7 @@ public class UserSkillService {
 	}
 	
 	public UserSkillResponseDTO levelDown(Long id) {
+		validarLevel(id);
 		UserSkill userSkill = mapper.map(obterPorId(id), UserSkill.class);
 		userSkill.setId(id);
 		
@@ -96,6 +99,11 @@ public class UserSkillService {
 		userSkill = userSkillRepository.save(userSkill);
 		
 		return mapper.map(userSkill, UserSkillResponseDTO.class);
+	}
+	
+	public Long validarLevel(Long id) {
+		if(id < 1 || id > 20) throw new ResourceBadRequestException("Level inválido - MIN[1] : MAX[20]");
+		return id;
 	}
 	
 	public void deletar(Long id) {
