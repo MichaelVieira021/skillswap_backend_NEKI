@@ -18,7 +18,7 @@ CREATE TABLE usuario (
 -- Tabela Skill
 CREATE TABLE skill (
     id BIGINT DEFAULT nextval('skill_id_seq') PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL UNIQUE,
     tecAmp INT NOT NULL,
     atkAdicional INT NOT NULL,
     duracao DOUBLE PRECISION NOT NULL,

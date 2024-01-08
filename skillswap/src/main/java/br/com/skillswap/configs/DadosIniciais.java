@@ -33,7 +33,7 @@ public class DadosIniciais {
 	private UsuarioRequestDTO getUsuario() {
 		UsuarioRequestDTO usuarioRequest = new UsuarioRequestDTO();
 		usuarioRequest.setLogin("MichaelVieira");
-		usuarioRequest.setSenha("123");
+		usuarioRequest.setSenha("1234");
 
 		return usuarioRequest;			
 	}
